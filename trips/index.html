@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Explore Trips - Wanderlust</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/trips.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="page-title">Curated Packages</h1>
+        <div id="tripsGrid" class="trips-grid"></div>
+    </div>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/data.js"></script>
+    <script>
+        const grid = document.getElementById('tripsGrid');
+        TRIPS_DATA.forEach(trip => {
+            const card = document.createElement('div');
+            card.className = 'trip-card';
+            card.innerHTML = `
+                <div class="trip-img" style="background-image: url('${trip.image}')"></div>
+                <div class="trip-content">
+                    <div class="trip-header">
+                        <h3>${trip.name}</h3>
+                        <span class="price">${formatCurrency(trip.price)}</span>
+                    </div>
+                    <p class="location">📍 ${trip.location}</p>
+                    <p class="duration">⏱ ${trip.duration}</p>
+                    <a href="details.html?id=${trip.id}" class="btn btn-primary full-width">View Details</a>
+                </div>
+            `;
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>

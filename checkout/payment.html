@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment - Wanderlust</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/checkout.css">
+</head>
+<body>
+    <div class="container" style="max-width: 600px;">
+        <div class="payment-card">
+            <h2>Secure Payment</h2>
+            <p class="mb-2">Enter your card details to finalize the booking.</p>
+            <form id="paymentForm">
+                <label>Card Number</label>
+                <input type="text" placeholder="0000 0000 0000 0000" maxlength="19" required>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div>
+                        <label>Expiry</label>
+                        <input type="text" placeholder="MM/YY" required>
+                    </div>
+                    <div>
+                        <label>CVV</label>
+                        <input type="text" placeholder="123" maxlength="3" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary full-width">Pay Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="../assets/js/utils.js"></script>
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Simulate Payment Processing
+            const btn = e.target.querySelector('button');
+            btn.textContent = "Processing...";
+            btn.disabled = true;
+
+            setTimeout(() => {
+                // Retrieve User and Pending Booking
+                const user = JSON.parse(localStorage.getItem('wanderlust_currentUser'));
+                const pending = JSON.parse(sessionStorage.getItem('wanderlust_pending_booking'));
+                
+                if(user && pending) {
+                    // Update Booking Status
+                    pending.status = 'Confirmed';
+                    pending.bookingId = 'WL-' + Date.now();
+                    
+                    // Update Local User Session
+                    user.bookings.push(pending);
+                    localStorage.setItem('wanderlust_currentUser', JSON.stringify(user));
+
+                    // Update Main DB (Simulated)
+                    const usersDB = JSON.parse(localStorage.getItem('wanderlust_users'));
+                    const dbUserIndex = usersDB.findIndex(u => u.email === user.email);
+                    if(dbUserIndex > -1) {
+                        usersDB[dbUserIndex] = user;
+                        localStorage.setItem('wanderlust_users', JSON.stringify(usersDB));
+                    }
+
+                    window.location.href = 'success.html';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

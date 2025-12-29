@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Wanderlust</title>
+    <link rel="stylesheet" href="assets/css/global.css">
+</head>
+<body>
+    <div class="container">
+        <h1>My Dashboard</h1>
+        <div class="profile-section">
+            <h2 id="userName">Hello, User</h2>
+        </div>
+
+        <h3 style="margin-top: 2rem;">Booking History</h3>
+        <div id="bookingList" style="margin-top: 1rem;"></div>
+    </div>
+
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        requireAuth();
+        const user = getCurrentUser();
+        document.getElementById('userName').textContent = `Hello, ${user.name}`;
+
+        const list = document.getElementById('bookingList');
+        
+        if (user.bookings.length === 0) {
+            list.innerHTML = '<p>No bookings found. <a href="trips/index.html" style="color:var(--accent)">Book a trip now!</a></p>';
+        } else {
+            user.bookings.forEach(b => {
+                const item = document.createElement('div');
+                item.style.cssText = "background: white; padding: 1.5rem; margin-bottom: 1rem; border-radius: 8px; box-shadow: var(--shadow-sm); display: flex; justify-content: space-between; align-items: center;";
+                
+                item.innerHTML = `
+                    <div>
+                        <h4 style="margin-bottom:0.2rem;">${b.tripName}</h4>
+                        <small style="color:#64748b;">Booked on: ${b.date} | ID: ${b.bookingId}</small>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-weight:bold; color:var(--primary);">${formatCurrency(b.total)}</div>
+                        <span style="color:var(--success); font-size:0.9rem; font-weight:600;">${b.status}</span>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+    </script>
+</body>
+</html>

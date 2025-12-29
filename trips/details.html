@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trip Details - Wanderlust</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/trips.css">
+</head>
+<body>
+    <div class="container" id="detailContainer">
+        <!-- Injected via JS -->
+    </div>
+
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/data.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const id = parseInt(params.get('id'));
+        const trip = TRIPS_DATA.find(t => t.id === id);
+
+        if(!trip) window.location.href = 'index.html';
+
+        document.getElementById('detailContainer').innerHTML = `
+            <div class="detail-layout">
+                <img src="${trip.image}" class="detail-hero">
+                <div class="detail-info">
+                    <h1>${trip.name}</h1>
+                    <h2 class="price-lg">${formatCurrency(trip.price)} <span class="per-person">/ person</span></h2>
+                    <p class="desc">${trip.description}</p>
+                    
+                    <h3>Highlights</h3>
+                    <ul class="highlights-list">
+                        ${trip.highlights.map(h => `<li>✨ ${h}</li>`).join('')}
+                    </ul>
+
+                    <div class="action-area">
+                        <button onclick="proceedToCheckout(${trip.id})" class="btn btn-primary btn-lg full-width">Book This Trip</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        function proceedToCheckout(tripId) {
+            if(!getCurrentUser()) {
+                // Save intent
+                localStorage.setItem('wanderlust_redirect', `checkout/index.html?tripId=${tripId}`);
+                window.location.href = '../auth/login.html';
+            } else {
+                window.location.href = `../checkout/index.html?tripId=${tripId}`;
+            }
+        }
+    </script>
+    <style>
+        .detail-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 3rem; margin-top: 2rem; }
+        .detail-hero { width: 100%; height: 400px; object-fit: cover; border-radius: 12px; }
+        .price-lg { font-size: 2rem; color: var(--primary); margin: 1rem 0; }
+        .per-person { font-size: 1rem; color: var(--text-light); font-weight: 400; }
+        .desc { margin-bottom: 2rem; color: var(--text-main); }
+        .highlights-list li { margin-bottom: 0.5rem; color: var(--text-main); }
+        .action-area { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #e2e8f0; }
+        @media (max-width: 768px) { .detail-layout { grid-template-columns: 1fr; } }
+    </style>
+</body>
+</html>

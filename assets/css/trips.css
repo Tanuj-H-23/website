@@ -1,0 +1,10 @@
+.page-title { margin-bottom: 2rem; font-size: 2rem; color: var(--primary); }
+.trips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+.trip-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow-sm); transition: transform 0.2s; }
+.trip-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+.trip-img { height: 200px; background-size: cover; background-position: center; }
+.trip-content { padding: 1.5rem; }
+.trip-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+.trip-header h3 { font-size: 1.1rem; color: var(--primary); }
+.price { font-weight: 700; color: var(--accent); }
+.location, .duration { color: var(--text-light); font-size: 0.9rem; margin-bottom: 0.5rem; }

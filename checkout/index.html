@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - Wanderlust</title>
+    <link rel="stylesheet" href="../assets/css/global.css">
+    <link rel="stylesheet" href="../assets/css/checkout.css">
+</head>
+<body>
+    <script src="../assets/js/utils.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script>requireAuth();</script> <!-- Guard Route -->
+
+    <div class="container">
+        <h1>Review & Checkout</h1>
+        <div class="checkout-grid">
+            <div class="summary-card" id="tripSummary">
+                <!-- Trip Details Loaded Here -->
+            </div>
+            <div class="payment-card">
+                <h3>Order Summary</h3>
+                <div class="row"><span>Base Price</span><span id="basePrice"></span></div>
+                <div class="row"><span>Tax (10%)</span><span id="taxPrice"></span></div>
+                <hr>
+                <div class="row total"><span>Total</span><span id="totalPrice"></span></div>
+                <button onclick="goToPayment()" class="btn btn-primary full-width mt-4">Proceed to Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../assets/js/data.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const tripId = parseInt(params.get('tripId'));
+        const trip = TRIPS_DATA.find(t => t.id === tripId);
+
+        if(!trip) window.location.href = '../trips/index.html';
+
+        // Render Summary
+        document.getElementById('tripSummary').innerHTML = `
+            <img src="${trip.image}" style="width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:1rem;">
+            <h2>${trip.name}</h2>
+            <p>📍 ${trip.location}</p>
+            <p>📅 ${trip.duration}</p>
+        `;
+
+        // Calc Prices
+        const tax = trip.price * 0.10;
+        const total = trip.price + tax;
+
+        document.getElementById('basePrice').textContent = formatCurrency(trip.price);
+        document.getElementById('taxPrice').textContent = formatCurrency(tax);
+        document.getElementById('totalPrice').textContent = formatCurrency(total);
+
+        function goToPayment() {
+            // Persist pending booking
+            const booking = {
+                tripId: trip.id,
+                tripName: trip.name,
+                total: total,
+                date: new Date().toLocaleDateString(),
+                status: 'pending'
+            };
+            sessionStorage.setItem('wanderlust_pending_booking', JSON.stringify(booking));
+            window.location.href = 'payment.html';
+        }
+    </script>
+</body>
+</html>
