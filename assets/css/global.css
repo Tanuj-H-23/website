@@ -11,6 +11,8 @@
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
     --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
     --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.2);
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
@@ -31,12 +33,15 @@ ul { list-style: none; }
 
 /* Navigation */
 .navbar {
-    background: var(--white);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding: 1rem 5%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -51,27 +56,46 @@ ul { list-style: none; }
 
 .btn {
     padding: 0.6rem 1.2rem;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
     border: none;
-    transition: all 0.2s;
+    transition: all 0.3s ease;
 }
 
-.btn-primary { background: var(--accent); color: var(--white); }
-.btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
-.btn-outline { border: 1px solid var(--text-light); color: var(--text-main); background: transparent; }
-.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.btn-primary { 
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+    color: var(--white);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+.btn-primary:hover { 
+    background: linear-gradient(135deg, var(--accent-hover) 0%, #0169a8 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+}
+.btn-outline { 
+    border: 1.5px solid rgba(14, 165, 233, 0.5);
+    color: var(--accent);
+    background: rgba(14, 165, 233, 0.1);
+    backdrop-filter: blur(10px);
+}
+.btn-outline:hover { 
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(14, 165, 233, 0.15);
+    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.2);
+}
 
 /* Main Container */
 .container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; width: 100%; }
 
 /* Footer */
 footer {
-    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, #1a2e4a 100%);
     color: var(--white);
     padding: 3rem 5%;
     margin-top: auto;
     text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 .hidden { display: none !important; }
