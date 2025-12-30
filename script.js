@@ -8,7 +8,7 @@ const destinations = [
         title: "Kyoto, Japan",
         price: "$2,400",
         duration: "10 Days",
-        image: "kyoto.avif",
+        image: "Kyoto.avif",
         description: "Experience the timeless beauty of Japan. Visit ancient temples, walk through the Fushimi Inari Shrine, and witness the magical cherry blossom season.",
         highlights: ["Tea Ceremony", "Bamboo Forest", "Bullet Train Ride"]
     },
