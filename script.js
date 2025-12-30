@@ -56,6 +56,15 @@ const destinations = [
         image: "Banff.jpeg",
         description: "Escape to the mountains. Witness the turquoise waters of Lake Louise and hike through the breathtaking trails of the Canadian Rockies.",
         highlights: ["Lake Louise", "Gondola Ride", "Wildlife Spotting"]
+    },
+    {
+        id: 7,
+        title: "Amsterdam, USA",
+        price: "$3,400",
+        duration: "7 Days",
+        image: "Amsterdam.jpeg",
+        description: "Amsterdam is a charming city of canals, bicycles, and historic architecture. It blends world‑class museums with vibrant cafés and lively neighborhoods.",
+        highlights: ["Anne Frank House", "Van Gogh museum", "Canals of Amsterdam"]
     }
 ];
 
