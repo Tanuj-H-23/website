@@ -65,6 +65,24 @@ const destinations = [
         image: "Amsterdam.jpg",
         description: "Amsterdam is a charming city of canals, bicycles, and historic architecture. It blends world‑class museums with vibrant cafés and lively neighborhoods.",
         highlights: ["Anne Frank House", "Van Gogh museum", "Canals of Amsterdam"]
+    },
+    {
+        id: 8,
+        title: "Mangaluru, India",
+        price: "$2,000",
+        duration: "5 Days",
+        image: "Mangaluru.jpg",
+        description: "Mangalore is a coastal city known for its pristine beaches, lush coconut palms, and vibrant temples. It blends rich cultural heritage with delicious coastal cuisine and a laid‑back seaside charm.",
+        highlights: ["Rich Tradotion", "Ancient Temples", "Monsoon Paradise"]
+    },
+    {
+        id: 9,
+        title: "Barcelona, Brazil",
+        price: "$2,800",
+        duration: "6 Days",
+        image: "Barca.webp",
+        description: "Barcelona is a dazzling city of Gaudí's masterpieces, lively streets, and Mediterranean beaches. It blends rich Catalan culture with vibrant markets, world‑class cuisine, and a festive spirit.",
+        highlights: ["Football", "Basílica de la Sagrada Família", "Park Güell"]
     }
 ];
 
