@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wanderlust | AI Trip Planning Agent</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-paper-plane"></i> Wanderlust.
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#destinations">Destinations</a></li>
+            <li><a href="#services">Services</a></li>
+            <li id="authLink"></li>
+        </ul>
+        <div class="hamburger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="home" class="hero">
+        <div class="hero-content">
+            <h1>Discover the World's<br> <span class="highlight">Hidden Gems</span></h1>
+            <p>Let our intelligent agent curate the perfect itinerary for your next adventure. Luxury, adventure, or relaxation—we plan it all.</p>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Where do you want to go?">
+                <button onclick="filterDestinations()">Find Trips</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Destinations Section -->
+    <section id="destinations" class="destinations-section">
+        <div class="section-header">
+            <h2>Trending Destinations</h2>
+            <p>Handpicked itineraries just for you</p>
+        </div>
+        
+        <!-- Grid Container for JS Injection -->
+        <div class="destination-grid" id="destinationGrid">
+            <!-- Content will be loaded by script.js -->
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="service-card">
+            <i class="fas fa-route"></i>
+            <h3>Custom Itineraries</h3>
+            <p>Tailor-made day-by-day plans based on your personal interests and pace.</p>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-hotel"></i>
+            <h3>Smart Booking</h3>
+            <p>We find the best deals on hotels and flights using real-time data.</p>
+        </div>
+        <div class="service-card">
+            <i class="fas fa-headset"></i>
+            <h3>24/7 Support</h3>
+            <p>Our travel agents are available around the clock to assist you.</p>
+        </div>
+    </section>
+
+    <!-- Contact / Booking Section -->
+    <section id="contact" class="contact-section">
+        <div class="contact-container">
+            <h2>Ready to Start Your Journey?</h2>
+            <p>Fill out the form below and our agent will reach out within 24 hours.</p>
+            <form id="bookingForm">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <select>
+                    <option value="" disabled selected>Select Destination Type</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="relaxation">Relaxation</option>
+                    <option value="culture">Culture</option>
+                </select>
+                <button type="submit" class="btn-primary">Request Quote</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Wanderlust.</div>
+            <p>&copy; 2023 Wanderlust Trip Agent. All rights reserved.</p>
+            <div class="socials">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Trip Details Modal -->
+    <div id="tripModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic Content Here -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="closeModalBtn">Close</button>
+                <button class="btn-primary">Book This Trip</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="booking.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

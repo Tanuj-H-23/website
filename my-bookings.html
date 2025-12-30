@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | Wanderlust</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .bookings-container {
+            max-width: 1200px;
+            margin: 120px auto 50px;
+            padding: 0 20px;
+        }
+
+        .bookings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .bookings-header h1 {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .bookings-header p {
+            color: #666;
+            margin-top: 0.5rem;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-section select {
+            padding: 0.7rem 1rem;
+            border: 2px solid var(--grey);
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .filter-section select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--grey);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h2 {
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .booking-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .booking-card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #ff8a80 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .booking-ref {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .booking-ref strong {
+            font-family: 'Courier New', monospace;
+            display: block;
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .status-badge.confirmed {
+            background: rgba(78, 205, 196, 0.8);
+        }
+
+        .status-badge.cancelled {
+            background: rgba(255, 107, 107, 0.8);
+        }
+
+        .booking-card-body {
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .booking-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .info-label {
+            color: #999;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .info-value {
+            color: var(--dark);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .booking-card-footer {
+            padding: 1.5rem;
+            background: var(--grey);
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-small {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .btn-view {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-view:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .btn-cancel {
+            background: #fee;
+            color: #c33;
+            border: 2px solid #c33;
+        }
+
+        .btn-cancel:hover {
+            background: #c33;
+            color: white;
+        }
+
+        .btn-cancel:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Modal Styles */
+        .modal-details {
+            display: none;
+            position: fixed;
+            z-index: 3000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-details.active {
+            display: flex;
+        }
+
+        .modal-content-details {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 0.4s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .close-details {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .close-details:hover {
+            color: var(--dark);
+        }
+
+        .modal-details h2 {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            margin-top: 0;
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--grey);
+        }
+
+        .detail-section:last-child {
+            border-bottom: none;
+        }
+
+        .detail-section h3 {
+            color: var(--primary);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            color: #666;
+        }
+
+        .detail-item strong {
+            color: var(--dark);
+        }
+
+        .travelers-list {
+            list-style: none;
+        }
+
+        .travelers-list li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+
+        .travelers-list li strong {
+            color: var(--dark);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--grey);
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-actions .btn-close-modal {
+            background: var(--grey);
+            color: var(--dark);
+        }
+
+        .modal-actions .btn-close-modal:hover {
+            background: #ddd;
+        }
+
+        .modal-actions .btn-cancel-booking {
+            background: #fee;
+            color: #c33;
+        }
+
+        .modal-actions .btn-cancel-booking:hover {
+            background: #c33;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .booking-card-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .booking-card-body {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-section {
+                flex-direction: column;
+            }
+
+            .filter-section select {
+                width: 100%;
+            }
+
+            .modal-content-details {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-paper-plane"></i> Wanderlust.
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#destinations">Destinations</a></li>
+            <li><a href="my-bookings.html">My Bookings</a></li>
+        </ul>
+    </nav>
+
+    <div class="bookings-container">
+        <div class="bookings-header">
+            <div>
+                <h1>My Trips</h1>
+                <p>Manage and view your bookings</p>
+            </div>
+            <a href="index.html#destinations" class="btn-primary" style="padding: 0.8rem 1.5rem; text-decoration: none;">
+                <i class="fas fa-plus"></i> Book New Trip
+            </a>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <select id="statusFilter" onchange="filterBookings()">
+                <option value="">All Bookings</option>
+                <option value="Confirmed">Confirmed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
+
+        <!-- Bookings List -->
+        <div id="bookingsList"></div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state" style="display: none;">
+            <i class="fas fa-suitcase-rolling"></i>
+            <h2>No Bookings Yet</h2>
+            <p>You haven't booked any trips yet. Start planning your adventure today!</p>
+            <a href="index.html#destinations" class="btn-primary" style="display: inline-block; padding: 0.8rem 1.5rem; text-decoration: none;">
+                Explore Destinations
+            </a>
+        </div>
+    </div>
+
+    <!-- Booking Details Modal -->
+    <div id="bookingDetailsModal" class="modal-details">
+        <div class="modal-content-details">
+            <span class="close-details" onclick="closeBookingDetails()">&times;</span>
+            <div id="modalDetailsBody"></div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="booking.js"></script>
+    <script>
+        // Check authentication
+        requireAuth();
+
+        // Load and display bookings
+        function loadBookings() {
+            const bookings = Booking.getBookings();
+            displayBookings(bookings);
+        }
+
+        // Display bookings
+        function displayBookings(bookings) {
+            const bookingsList = document.getElementById('bookingsList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (bookings.length === 0) {
+                bookingsList.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            bookingsList.innerHTML = '';
+
+            bookings.forEach(booking => {
+                const startDate = new Date(booking.startDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                });
+
+                const bookingCard = document.createElement('div');
+                bookingCard.className = 'booking-card';
+                bookingCard.innerHTML = `
+                    <div class="booking-card-header">
+                        <div>
+                            <div class="booking-ref">Booking Reference</div>
+                            <strong>#${booking.id}</strong>
+                        </div>
+                        <span class="status-badge ${booking.status.toLowerCase()}">${booking.status}</span>
+                    </div>
+
+                    <div class="booking-card-body">
+                        <div class="booking-info">
+                            <div class="info-row">
+                                <span class="info-label">Destination</span>
+                                <span class="info-value">${booking.trip.title}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Start Date</span>
+                                <span class="info-value">${startDate}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Travelers</span>
+                                <span class="info-value">${booking.travelers.length} person${booking.travelers.length > 1 ? 's' : ''}</span>
+                            </div>
+                        </div>
+
+                        <div class="booking-info">
+                            <div class="info-row">
+                                <span class="info-label">Booking Date</span>
+                                <span class="info-value">${new Date(booking.bookingDate).toLocaleDateString()}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Total Amount</span>
+                                <span class="info-value" style="color: var(--primary); font-size: 1.1rem;">$${booking.total.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="booking-card-footer">
+                        <button class="btn-small btn-view" onclick="viewBookingDetails(${booking.id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        ${booking.status === 'Confirmed' ? `
+                            <button class="btn-small btn-cancel" onclick="confirmCancelBooking(${booking.id})">
+                                <i class="fas fa-times"></i> Cancel Booking
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+
+                bookingsList.appendChild(bookingCard);
+            });
+        }
+
+        // View booking details
+        function viewBookingDetails(bookingId) {
+            const booking = Booking.getBooking(bookingId);
+            if (!booking) return;
+
+            const startDate = new Date(booking.startDate).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const travelersHTML = booking.travelers.map((t, idx) => `
+                <li><strong>${t.firstName} ${t.lastName}</strong> - ${t.email}</li>
+            `).join('');
+
+            const detailsHTML = `
+                <h2>${booking.trip.title}</h2>
+
+                <div class="detail-section">
+                    <h3>Booking Information</h3>
+                    <div class="detail-item">
+                        <span>Booking Reference:</span>
+                        <strong>#${booking.id}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Status:</span>
+                        <strong>${booking.status}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Booking Date:</span>
+                        <strong>${new Date(booking.bookingDate).toLocaleDateString()}</strong>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Trip Details</h3>
+                    <div class="detail-item">
+                        <span>Destination:</span>
+                        <strong>${booking.trip.title}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Duration:</span>
+                        <strong>${booking.trip.duration}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Start Date:</span>
+                        <strong>${startDate}</strong>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong>Trip Highlights:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem; color: #666;">
+                            ${booking.trip.highlights.map(h => `<li>• ${h}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Travelers</h3>
+                    <ul class="travelers-list">
+                        ${travelersHTML}
+                    </ul>
+                </div>
+
+                <div class="detail-section">
+                    <h3>Price Breakdown</h3>
+                    <div class="detail-item">
+                        <span>Subtotal (${booking.travelers.length} traveler${booking.travelers.length > 1 ? 's' : ''}):</span>
+                        <strong>$${booking.subtotal.toLocaleString()}</strong>
+                    </div>
+                    <div class="detail-item">
+                        <span>Taxes & Fees:</span>
+                        <strong>$${booking.taxes.toLocaleString()}</strong>
+                    </div>
+                    <div class="detail-item" style="font-size: 1.1rem; border-top: 2px solid var(--primary); padding-top: 0.5rem; margin-top: 0.5rem;">
+                        <span>Total Amount:</span>
+                        <strong style="color: var(--primary);">$${booking.total.toLocaleString()}</strong>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-close-modal" onclick="closeBookingDetails()">Close</button>
+                    ${booking.status === 'Confirmed' ? `
+                        <button class="btn-cancel-booking" onclick="confirmCancelBooking(${booking.id})">
+                            <i class="fas fa-times"></i> Cancel Booking
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+
+            document.getElementById('modalDetailsBody').innerHTML = detailsHTML;
+            document.getElementById('bookingDetailsModal').classList.add('active');
+        }
+
+        // Close booking details
+        function closeBookingDetails() {
+            document.getElementById('bookingDetailsModal').classList.remove('active');
+        }
+
+        // Confirm cancel booking
+        function confirmCancelBooking(bookingId) {
+            if (confirm('Are you sure you want to cancel this booking? This action cannot be undone.')) {
+                cancelBooking(bookingId);
+            }
+        }
+
+        // Cancel booking
+        function cancelBooking(bookingId) {
+            const bookings = Booking.getBookings();
+            const bookingIndex = bookings.findIndex(b => b.id == bookingId);
+
+            if (bookingIndex > -1) {
+                bookings[bookingIndex].status = 'Cancelled';
+                
+                const user = Auth.getCurrentUser();
+                const allBookings = JSON.parse(localStorage.getItem('wanderlust_bookings') || '{}');
+                allBookings[user.id] = bookings;
+                localStorage.setItem('wanderlust_bookings', JSON.stringify(allBookings));
+
+                alert('Booking cancelled successfully. A refund will be processed within 5-7 business days.');
+                closeBookingDetails();
+                loadBookings();
+            }
+        }
+
+        // Filter bookings
+        function filterBookings() {
+            const filter = document.getElementById('statusFilter').value;
+            let bookings = Booking.getBookings();
+
+            if (filter) {
+                bookings = bookings.filter(b => b.status === filter);
+            }
+
+            displayBookings(bookings);
+        }
+
+        // Close modal on outside click
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('bookingDetailsModal');
+            if (e.target === modal) {
+                closeBookingDetails();
+            }
+        });
+
+        // Initialize
+        loadBookings();
+    </script>
+</body>
+</html>

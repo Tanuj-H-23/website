@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Trip | Wanderlust</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .booking-container {
+            max-width: 1000px;
+            margin: 120px auto 50px;
+            padding: 0 20px;
+        }
+
+        .steps-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .steps-header h1 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Booking Steps */
+        .booking-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            gap: 1rem;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--grey);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .step.completed .step-number {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .step-title {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .step-description {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        /* Content Area */
+        .booking-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+        }
+
+        .trip-summary {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            align-items: start;
+            border-bottom: 2px solid var(--grey);
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .trip-summary img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .trip-details h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .trip-details p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .trip-info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-item {
+            background: var(--grey);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .info-item label {
+            font-size: 0.85rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+
+        .info-item value {
+            display: block;
+            font-weight: 600;
+            color: var(--dark);
+            margin-top: 0.3rem;
+        }
+
+        /* Travelers Form */
+        .travelers-section h4 {
+            margin-bottom: 1.5rem;
+            color: var(--dark);
+            font-size: 1.2rem;
+        }
+
+        .traveler-card {
+            background: var(--grey);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .traveler-number {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+        }
+
+        /* Date Range */
+        .date-section {
+            background: var(--grey);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        /* Price Breakdown */
+        .price-breakdown {
+            background: var(--grey);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .price-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .price-row.total {
+            border-top: 2px solid var(--primary);
+            padding-top: 1rem;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .price-label {
+            color: #666;
+        }
+
+        .price-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: space-between;
+        }
+
+        .btn-secondary {
+            background: var(--grey);
+            color: var(--dark);
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: #ddd;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #c33;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .booking-steps {
+                flex-direction: column;
+                gap: 2rem;
+            }
+
+            .trip-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .trip-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .date-range {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-paper-plane"></i> Wanderlust.
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#destinations">Destinations</a></li>
+        </ul>
+    </nav>
+
+    <div class="booking-container">
+        <!-- Steps Header -->
+        <div class="steps-header">
+            <h1>Complete Your Booking</h1>
+            <p>Follow the steps below to book your dream vacation</p>
+        </div>
+
+        <!-- Booking Steps -->
+        <div class="booking-steps">
+            <div class="step active" id="step1">
+                <div class="step-number">1</div>
+                <div class="step-title">Trip Details</div>
+                <div class="step-description">Select your trip</div>
+            </div>
+            <div class="step" id="step2">
+                <div class="step-number">2</div>
+                <div class="step-title">Travelers</div>
+                <div class="step-description">Add traveler info</div>
+            </div>
+            <div class="step" id="step3">
+                <div class="step-number">3</div>
+                <div class="step-title">Payment</div>
+                <div class="step-description">Pay securely</div>
+            </div>
+            <div class="step" id="step4">
+                <div class="step-number">4</div>
+                <div class="step-title">Confirmation</div>
+                <div class="step-description">All done!</div>
+            </div>
+        </div>
+
+        <!-- Booking Content -->
+        <div class="booking-content">
+            <div class="error" id="errorMsg"></div>
+
+            <!-- Step 1: Trip Summary -->
+            <div id="step1Content">
+                <div class="trip-summary">
+                    <img id="tripImage" src="" alt="Destination">
+                    <div class="trip-details">
+                        <h3 id="tripTitle"></h3>
+                        <p id="tripDescription"></p>
+                        
+                        <div class="trip-info-grid">
+                            <div class="info-item">
+                                <label>Duration</label>
+                                <value id="tripDuration"></value>
+                            </div>
+                            <div class="info-item">
+                                <label>Price per Person</label>
+                                <value id="tripPrice"></value>
+                            </div>
+                            <div class="info-item">
+                                <label>Availability</label>
+                                <value>Available</value>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 1.5rem;">
+                            <h4 style="margin-bottom: 1rem; color: var(--dark);">Trip Highlights:</h4>
+                            <ul id="tripHighlights" style="list-style-position: inside; color: #666; line-height: 1.8;">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Number of Travelers -->
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--grey);">
+                    <label style="display: block; font-weight: 600; margin-bottom: 1rem; color: var(--dark);">
+                        Number of Travelers
+                    </label>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <button type="button" class="btn-secondary" onclick="decreaseTravelers()" style="width: 50px; padding: 0.5rem;">−</button>
+                        <input type="number" id="travelersCount" value="1" min="1" max="10" readonly style="width: 100px; text-align: center; border: 2px solid var(--primary);">
+                        <button type="button" class="btn-secondary" onclick="increaseTravelers()" style="width: 50px; padding: 0.5rem;">+</button>
+                    </div>
+                </div>
+
+                <!-- Date Selection -->
+                <div class="date-section" style="margin-top: 2rem;">
+                    <h4 style="margin-bottom: 1rem; color: var(--dark);">Select Start Date</h4>
+                    <div class="date-range">
+                        <div class="form-group">
+                            <label>Start Date</label>
+                            <input type="date" id="startDate" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Breakdown -->
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span class="price-label">Base Price per Person</span>
+                        <span class="price-value" id="pricePerPerson">$0</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Number of Travelers</span>
+                        <span class="price-value" id="travelerCount">1</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">Taxes & Fees (10%)</span>
+                        <span class="price-value" id="taxesAmount">$0</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total Amount</span>
+                        <span id="totalAmount">$0</span>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="goHome()">Cancel</button>
+                    <button class="btn-primary" onclick="nextStep()">Continue to Travelers Info</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Travelers Information -->
+            <div id="step2Content" style="display: none;">
+                <div class="travelers-section">
+                    <h4>Traveler Information</h4>
+                    <p style="color: #666; margin-bottom: 2rem;">Please provide details for all travelers.</p>
+                    <div id="travelersForm"></div>
+                </div>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn-primary" onclick="nextStep()">Continue to Payment</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Payment -->
+            <div id="step3Content" style="display: none;">
+                <h4 style="margin-bottom: 1.5rem; color: var(--dark);">Payment Details</h4>
+                
+                <div style="background: var(--grey); padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                    <h5 style="color: var(--dark); margin-bottom: 1rem;">Order Summary</h5>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span>Subtotal</span>
+                        <span id="summarySubtotal">$0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #ddd;">
+                        <span>Taxes & Fees</span>
+                        <span id="summaryTaxes">$0</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; color: var(--primary);">
+                        <span>Total</span>
+                        <span id="summaryTotal">$0</span>
+                    </div>
+                </div>
+
+                <form id="paymentForm">
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Cardholder Name</label>
+                        <input type="text" placeholder="John Doe" required>
+                    </div>
+                    
+                    <div class="form-group" style="margin-bottom: 1rem;">
+                        <label>Card Number</label>
+                        <input type="text" placeholder="4532 1234 5678 9010" maxlength="19" required>
+                    </div>
+
+                    <div class="form-row" style="margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label>Expiry Date</label>
+                            <input type="text" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label>CVV</label>
+                            <input type="text" placeholder="123" maxlength="3" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row full" style="margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label>Billing Address</label>
+                            <input type="text" placeholder="Street Address" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" placeholder="City" required>
+                        </div>
+                        <div class="form-group">
+                            <label>State/Province</label>
+                            <input type="text" placeholder="State" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row" style="margin-bottom: 1rem;">
+                        <div class="form-group">
+                            <label>ZIP/Postal Code</label>
+                            <input type="text" placeholder="12345" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Country</label>
+                            <input type="text" placeholder="Country" required>
+                        </div>
+                    </div>
+
+                    <div style="background: #f0f9ff; border-left: 4px solid var(--secondary); padding: 1rem; border-radius: 5px; margin-bottom: 1.5rem;">
+                        <label style="display: flex; align-items: center; cursor: pointer; margin: 0;">
+                            <input type="checkbox" checked style="margin-right: 0.5rem; width: 18px; height: 18px; cursor: pointer;">
+                            <span style="color: #666;">I agree to the terms and conditions</span>
+                        </label>
+                    </div>
+                </form>
+
+                <div class="button-group">
+                    <button class="btn-secondary" onclick="previousStep()">Back</button>
+                    <button class="btn-primary" onclick="processPayment()">Complete Payment</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Confirmation Message -->
+            <div id="step4Content" style="display: none; text-align: center;">
+                <div style="padding: 2rem;">
+                    <div style="font-size: 3rem; color: var(--secondary); margin-bottom: 1rem;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h2 style="color: var(--dark); margin-bottom: 0.5rem;">Booking Confirmed!</h2>
+                    <p style="color: #666; margin-bottom: 2rem;">
+                        Thank you for booking with Wanderlust. Your confirmation details have been sent to your email.
+                    </p>
+                    <div id="confirmationDetails" style="background: var(--grey); padding: 2rem; border-radius: 10px; text-align: left; margin-bottom: 2rem;">
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="goHome()">Back to Home</button>
+                        <button class="btn-secondary" onclick="downloadItinerary()">Download Itinerary</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="booking.js"></script>
+    <script>
+        // Check authentication
+        requireAuth();
+
+        let currentStep = 1;
+        const destinations = [
+            { id: 1, title: "Kyoto, Japan", price: "$2,400", duration: "10 Days", image: "kyoto.avif", description: "Experience the timeless beauty of Japan. Visit ancient temples, walk through the Fushimi Inari Shrine, and witness the magical cherry blossom season.", highlights: ["Tea Ceremony", "Bamboo Forest", "Bullet Train Ride"] },
+            { id: 2, title: "Santorini, Greece", price: "$3,100", duration: "7 Days", image: "Santorini.webp", description: "Relax in the whitewashed buildings of Oia, watch the world-famous sunsets, and swim in the crystal-clear Aegean Sea on this romantic getaway.", highlights: ["Sunset Dinner", "Volcano Tour", "Wine Tasting"] },
+            { id: 3, title: "Bali, Indonesia", price: "$1,200", duration: "14 Days", image: "Bali.avif", description: "A tropical paradise awaits. From the spiritual vibes of Ubud to the beach parties in Seminyak, Bali offers a diverse experience for every traveler.", highlights: ["Monkey Forest", "Surfing Lessons", "Rice Terraces"] },
+            { id: 4, title: "Reykjavik, Iceland", price: "$2,800", duration: "6 Days", image: "Rejavik.avif", description: "Hunt for the Northern Lights and soak in the Blue Lagoon. Iceland offers dramatic landscapes, waterfalls, and volcanic terrain.", highlights: ["Northern Lights", "Golden Circle", "Blue Lagoon"] },
+            { id: 5, title: "Machu Picchu, Peru", price: "$1,900", duration: "9 Days", image: "Machu.avif", description: "Trek the Inca Trail to the lost city of Machu Picchu. Explore the Sacred Valley and enjoy the rich culture and cuisine of Cusco.", highlights: ["Inca Trail", "Cusco City Tour", "Alpaca Farm"] },
+            { id: 6, title: "Banff, Canada", price: "$1,800", duration: "8 Days", image: "Banff.jpeg", description: "Escape to the mountains. Witness the turquoise waters of Lake Louise and hike through the breathtaking trails of the Canadian Rockies.", highlights: ["Lake Louise", "Gondola Ride", "Wildlife Spotting"] }
+        ];
+
+        // Load trip details
+        function loadTripDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tripId = parseInt(urlParams.get('tripId'));
+            const trip = destinations.find(t => t.id === tripId);
+
+            if (!trip) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('tripImage').src = trip.image;
+            document.getElementById('tripTitle').textContent = trip.title;
+            document.getElementById('tripDescription').textContent = trip.description;
+            document.getElementById('tripDuration').textContent = trip.duration;
+            document.getElementById('tripPrice').textContent = trip.price;
+
+            const highlightsHtml = trip.highlights.map(h => `<li>• ${h}</li>`).join('');
+            document.getElementById('tripHighlights').innerHTML = highlightsHtml;
+
+            // Store trip in session
+            Booking.setCurrentBookingSession({ trip });
+
+            // Set default start date
+            const startDate = new Date();
+            document.getElementById('startDate').valueAsDate = startDate;
+
+            updatePrices();
+        }
+
+        // Update prices
+        function updatePrices() {
+            const trip = Booking.getCurrentBookingSession().trip;
+            const price = parseInt(trip.price.replace('$', '').replace(',', ''));
+            const travelers = parseInt(document.getElementById('travelersCount').value);
+
+            const subtotal = price * travelers;
+            const taxes = Math.round(subtotal * 0.1);
+            const total = subtotal + taxes;
+
+            document.getElementById('pricePerPerson').textContent = '$' + price.toLocaleString();
+            document.getElementById('travelerCount').textContent = travelers;
+            document.getElementById('taxesAmount').textContent = '$' + taxes.toLocaleString();
+            document.getElementById('totalAmount').textContent = '$' + total.toLocaleString();
+
+            document.getElementById('summarySubtotal').textContent = '$' + subtotal.toLocaleString();
+            document.getElementById('summaryTaxes').textContent = '$' + taxes.toLocaleString();
+            document.getElementById('summaryTotal').textContent = '$' + total.toLocaleString();
+        }
+
+        function increaseTravelers() {
+            const input = document.getElementById('travelersCount');
+            const current = parseInt(input.value);
+            if (current < 10) {
+                input.value = current + 1;
+                generateTravelersForm();
+                updatePrices();
+            }
+        }
+
+        function decreaseTravelers() {
+            const input = document.getElementById('travelersCount');
+            const current = parseInt(input.value);
+            if (current > 1) {
+                input.value = current - 1;
+                generateTravelersForm();
+                updatePrices();
+            }
+        }
+
+        // Generate travelers form
+        function generateTravelersForm() {
+            const count = parseInt(document.getElementById('travelersCount').value);
+            const form = document.getElementById('travelersForm');
+            form.innerHTML = '';
+
+            for (let i = 1; i <= count; i++) {
+                form.innerHTML += `
+                    <div class="traveler-card">
+                        <div class="traveler-number">Traveler ${i}</div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" data-traveler="${i}" data-field="firstName" placeholder="First Name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" data-traveler="${i}" data-field="lastName" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" data-traveler="${i}" data-field="email" placeholder="Email Address" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" data-traveler="${i}" data-field="phone" placeholder="Phone Number" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" data-traveler="${i}" data-field="dob" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Nationality</label>
+                                <input type="text" data-traveler="${i}" data-field="nationality" placeholder="e.g., American" required>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Navigation
+        function nextStep() {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
+
+            if (currentStep === 1) {
+                const startDate = document.getElementById('startDate').value;
+
+                if (!startDate) {
+                    errorMsg.textContent = 'Please select a start date';
+                    errorMsg.style.display = 'block';
+                    return;
+                }
+
+                const session = Booking.getCurrentBookingSession();
+                session.travelers = parseInt(document.getElementById('travelersCount').value);
+                session.startDate = startDate;
+                Booking.setCurrentBookingSession(session);
+
+                generateTravelersForm();
+            } else if (currentStep === 2) {
+                // Validate travelers form
+                const travelersForm = document.querySelectorAll('#travelersForm input');
+                for (let input of travelersForm) {
+                    if (!input.value) {
+                        errorMsg.textContent = 'Please fill in all traveler information';
+                        errorMsg.style.display = 'block';
+                        return;
+                    }
+                }
+
+                // Store travelers data
+                const session = Booking.getCurrentBookingSession();
+                session.travelers = [];
+                const count = parseInt(document.getElementById('travelersCount').value);
+                
+                for (let i = 1; i <= count; i++) {
+                    const travelerInputs = document.querySelectorAll(`input[data-traveler="${i}"]`);
+                    const traveler = {};
+                    travelerInputs.forEach(input => {
+                        traveler[input.getAttribute('data-field')] = input.value;
+                    });
+                    session.travelers.push(traveler);
+                }
+                Booking.setCurrentBookingSession(session);
+            }
+
+            goToStep(currentStep + 1);
+        }
+
+        function previousStep() {
+            goToStep(currentStep - 1);
+        }
+
+        function goToStep(step) {
+            // Hide all content
+            document.getElementById('step1Content').style.display = 'none';
+            document.getElementById('step2Content').style.display = 'none';
+            document.getElementById('step3Content').style.display = 'none';
+            document.getElementById('step4Content').style.display = 'none';
+
+            // Update step indicators
+            document.getElementById('step1').classList.remove('active', 'completed');
+            document.getElementById('step2').classList.remove('active', 'completed');
+            document.getElementById('step3').classList.remove('active', 'completed');
+            document.getElementById('step4').classList.remove('active', 'completed');
+
+            for (let i = 1; i < step; i++) {
+                document.getElementById('step' + i).classList.add('completed');
+            }
+
+            document.getElementById('step' + step).classList.add('active');
+
+            // Show current content
+            document.getElementById('step' + step + 'Content').style.display = 'block';
+
+            currentStep = step;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function processPayment() {
+            const errorMsg = document.getElementById('errorMsg');
+            const paymentForm = document.getElementById('paymentForm');
+            const inputs = paymentForm.querySelectorAll('input');
+
+            errorMsg.style.display = 'none';
+
+            let valid = true;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    valid = false;
+                }
+            });
+
+            if (!valid) {
+                errorMsg.textContent = 'Please fill in all payment details';
+                errorMsg.style.display = 'block';
+                return;
+            }
+
+            // Simulate payment processing
+            const paymentBtn = event.target;
+            paymentBtn.disabled = true;
+            paymentBtn.textContent = 'Processing...';
+
+            setTimeout(() => {
+                const session = Booking.getCurrentBookingSession();
+                const trip = session.trip;
+                const price = parseInt(trip.price.replace('$', '').replace(',', ''));
+                const subtotal = price * session.travelers.length;
+                const taxes = Math.round(subtotal * 0.1);
+                const total = subtotal + taxes;
+
+                const bookingData = {
+                    trip: trip,
+                    travelers: session.travelers,
+                    startDate: session.startDate,
+                    endDate: session.endDate,
+                    subtotal: subtotal,
+                    taxes: taxes,
+                    total: total,
+                    paymentMethod: 'Credit Card'
+                };
+
+                const result = Booking.saveBooking(bookingData);
+
+                if (result.success) {
+                    const booking = result.booking;
+                    showConfirmation(booking);
+                    goToStep(4);
+                } else {
+                    errorMsg.textContent = 'Payment failed. Please try again.';
+                    errorMsg.style.display = 'block';
+                    paymentBtn.disabled = false;
+                    paymentBtn.textContent = 'Complete Payment';
+                }
+            }, 2000);
+        }
+
+        function showConfirmation(booking) {
+            const confirmDetails = document.getElementById('confirmationDetails');
+            const session = Booking.getCurrentBookingSession();
+
+            confirmDetails.innerHTML = `
+                <div style="margin-bottom: 1.5rem;">
+                    <h4 style="color: var(--dark); margin-bottom: 0.5rem;">Booking Reference</h4>
+                    <p style="font-size: 1.2rem; font-weight: 700; color: var(--primary);">#${booking.id}</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <h4 style="color: var(--dark); margin-bottom: 0.5rem;">Destination</h4>
+                        <p style="color: #666;">${session.trip.title}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--dark); margin-bottom: 0.5rem;">Start Date</h4>
+                        <p style="color: #666;">${new Date(session.startDate).toLocaleDateString()}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--dark); margin-bottom: 0.5rem;">Number of Travelers</h4>
+                        <p style="color: #666;">${session.travelers.length} person${session.travelers.length > 1 ? 's' : ''}</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--dark); margin-bottom: 0.5rem;">Total Amount</h4>
+                        <p style="font-weight: 700; color: var(--primary);">$${booking.total.toLocaleString()}</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 style="color: var(--dark); margin-bottom: 1rem;">Primary Traveler</h4>
+                    <p style="color: #666; margin-bottom: 0.3rem;"><strong>${session.travelers[0].firstName} ${session.travelers[0].lastName}</strong></p>
+                    <p style="color: #666; margin-bottom: 0.3rem;">${session.travelers[0].email}</p>
+                    <p style="color: #666;">${session.travelers[0].phone}</p>
+                </div>
+            `;
+        }
+
+        function downloadItinerary() {
+            const session = Booking.getCurrentBookingSession();
+            const trip = session.trip;
+            const travelers = session.travelers;
+            const startDate = new Date(session.startDate).toLocaleDateString();
+
+            let content = `WANDERLUST TRIP ITINERARY\n`;
+            content += `================================\n\n`;
+            content += `DESTINATION: ${trip.title}\n`;
+            content += `DURATION: ${trip.duration}\n`;
+            content += `START DATE: ${startDate}\n\n`;
+            content += `PRIMARY TRAVELER:\n`;
+            content += `${travelers[0].firstName} ${travelers[0].lastName}\n`;
+            content += `${travelers[0].email}\n`;
+            content += `${travelers[0].phone}\n\n`;
+            content += `DESCRIPTION:\n${trip.description}\n\n`;
+            content += `HIGHLIGHTS:\n${trip.highlights.map(h => `• ${h}`).join('\n')}\n\n`;
+            content += `Enjoy your trip!\n`;
+
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', 'wanderlust_itinerary.txt');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function goHome() {
+            Booking.clearBookingSession();
+            window.location.href = 'index.html';
+        }
+
+        // Initialize
+        loadTripDetails();
+    </script>
+</body>
+</html>
