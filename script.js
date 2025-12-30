@@ -62,7 +62,7 @@ const destinations = [
         title: "Amsterdam, USA",
         price: "$3,400",
         duration: "7 Days",
-        image: "Amsterdam.jpeg",
+        image: "Amsterdam.jpg",
         description: "Amsterdam is a charming city of canals, bicycles, and historic architecture. It blends world‑class museums with vibrant cafés and lively neighborhoods.",
         highlights: ["Anne Frank House", "Van Gogh museum", "Canals of Amsterdam"]
     }
