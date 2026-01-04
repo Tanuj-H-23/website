@@ -466,7 +466,9 @@
         }
 
         // Initialize
-        loadDashboard();
+        if(requireAuth()) {
+            loadDashboard();
+        }
     </script>
 </body>
 </html>
